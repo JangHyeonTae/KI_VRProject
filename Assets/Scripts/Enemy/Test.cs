@@ -79,22 +79,25 @@ public class Test : MonoBehaviour, IDamageable
         {
             //애니메이션 실행
             //statePattern에 넘길거임
-            avatar.GetComponent<MeshRenderer>().material.color = Color.red;
+            
+            Debug.Log("Red");
         }
         else if (amount > 1 && amount <= 5)
         {
-            avatar.GetComponent<MeshRenderer>().material.color = Color.yellow;
+            
+            Debug.Log("Yellow");
         }
         else
         {
-            avatar.GetComponent<MeshRenderer>().material.color = Color.black;
+            
+            Debug.Log("Black");
         }
 
         yield return new WaitForSeconds(1f);
         //애니메이션 종료
         StopCoroutine(cor);
         cor = null;
-        avatar.GetComponent<MeshRenderer>().material.color = Color.white;
+        
     }
 
     public void Attack(int amount)
