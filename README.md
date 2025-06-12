@@ -1,6 +1,6 @@
 # KI_VRProject
 
-Project 
+Project 복싱게임
 
 1씬) 핸드 트래킹을 사용해서 오브젝트 때리기
 
