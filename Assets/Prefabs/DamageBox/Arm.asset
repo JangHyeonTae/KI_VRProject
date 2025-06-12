@@ -15,3 +15,4 @@ MonoBehaviour:
   trigPoint: 3
   value: 1
   Particle: {fileID: 0}
+  punchAudio: {fileID: 8300000, guid: d3c59fb192599fe4d9b39e2946a14f2b, type: 3}

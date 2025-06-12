@@ -13,6 +13,7 @@ public class Test : MonoBehaviour, IDamageable
     [field: SerializeField] public int HP { get; set; }
     [SerializeField] private GameObject avatar;
     [SerializeField] private GameObject[] damageCollider;
+
     Animator animator;
 
     Coroutine cor;
@@ -52,9 +53,7 @@ public class Test : MonoBehaviour, IDamageable
 
     public void GetDamageBox(EnemyBody _enemyBody)
     {
-        Debug.Log($"GetDamageBox 1 :{_enemyBody.damageBox.GetDamageValue()}");
         if (_enemyBody == null) return;
-        Debug.Log($"GetDamageBox 2 :{_enemyBody.damageBox.GetDamageValue()}");
         TakeDamage(_enemyBody.damageBox.GetDamageValue());
     }
 
@@ -62,10 +61,8 @@ public class Test : MonoBehaviour, IDamageable
 
     public void TakeDamage(int amount)
     {
-        Debug.Log($"TakeDamage 1 :{amount}");
         if (amount <= 0) return;
         HP = Mathf.Max(0, HP - amount);
-        Debug.Log($"TakeDamage 2 :{amount}");
         if (cor == null)
         {
             cor = StartCoroutine(TakeHit(amount));
@@ -97,8 +94,8 @@ public class Test : MonoBehaviour, IDamageable
         //애니메이션 종료
         StopCoroutine(cor);
         cor = null;
-        
     }
+
 
     public void Attack(int amount)
     {

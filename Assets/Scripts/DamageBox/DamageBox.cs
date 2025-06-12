@@ -8,9 +8,9 @@ public class DamageBox : ScriptableObject
     public TrigPoint trigPoint;
     public int value;
     public GameObject Particle;
+    public AudioClip punchAudio;
 
     public int GetDamageValue() => value;
-    public TrigPoint GetType() => trigPoint;
 }
 public enum TrigPoint
 {
