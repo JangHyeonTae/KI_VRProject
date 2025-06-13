@@ -9,38 +9,39 @@ public class PlayerController : XRDirectInteractor
     private bool isAttack = false;
 
     List<Collider> colList = new();
-    public LayerMask targetLayer;
     private GameObject targetObject;
-    private GameObject curObject;
-
+    private Coroutine attackCor;
     protected override void OnHoverEntered(HoverEnterEventArgs args)
     {
         base.OnHoverEntered(args);
 
-
-        if(targetObject)
         targetObject = args.interactableObject.transform.gameObject;
 
-
-        //if((target.layer & targetLayer) != 0 || target != null)
-        //{
-        //    targetObject = target;
-        //    Debug.Log($"{target.name}");
-        //}
-        Attack();
     }
-
 
     public void Attack()
     {
+        if(attackCor == null)
+        {
+            attackCor = StartCoroutine(AttackCoroutine());
+        }
+        else
+        {
+            StopCoroutine(attackCor);
+        }
+    }
+
+    IEnumerator AttackCoroutine()
+    {
+        yield return new WaitForEndOfFrame();
         if (targetObject == null)
         {
-            return;
+            yield break;
         }
 
-        if(targetObject.layer == 9)
+        if (targetObject.layer == 9)
         {
-            Manager.FightInstance.GetHitPoint(targetObject.GetComponentInChildren<EnemyBody>());
+            Manager.FightInstance.GetHitPoint(targetObject.transform.GetComponentInChildren<EnemyBody>());
             StartCoroutine(Delay());
         }
     }

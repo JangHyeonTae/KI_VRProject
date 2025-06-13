@@ -42,6 +42,7 @@ public class FightManager : MonoBehaviour
         {
             if (enemyBody[i] == null || enemyBody[i].damageBox == null)
             {
+                Debug.Log($"enemyBodyDict Not Set");
                 continue;
             }
 
