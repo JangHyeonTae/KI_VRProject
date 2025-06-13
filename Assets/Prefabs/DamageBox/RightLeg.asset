@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d7e1fa26ad5e3b4698827700b6a3d09, type: 3}
-  m_Name: Head
+  m_Name: RightLeg
   m_EditorClassIdentifier: 
-  trigPoint: 0
-  value: 10
+  trigPoint: 2
+  value: 0
   Particle: {fileID: 0}
-  punchAudio: {fileID: 8300000, guid: 727e85301e987d24c907d694259f61bf, type: 3}
-  ID: 1
+  punchAudio: {fileID: 8300000, guid: 0ca1a92d4ef091b429cd520552e84a8f, type: 3}
+  ID: 5

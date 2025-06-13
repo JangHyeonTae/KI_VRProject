@@ -8,7 +8,7 @@ public class FightManager : MonoBehaviour
     private static FightManager fightInstance;
     public static FightManager FightInstance { get { return fightInstance; } }
 
-    public EnemyBody[] enemyBody;
+    public EnemyBody[] enemyBody = new EnemyBody[6];
     Dictionary<int, EnemyBody> enemyBodyDict;
 
 
@@ -17,7 +17,6 @@ public class FightManager : MonoBehaviour
 
     public UnityEvent<EnemyBody> OnHit;
 
-    public PlayerController player;
     public Test enemy;
 
 
@@ -34,10 +33,18 @@ public class FightManager : MonoBehaviour
         }
 
 
-        enemyBody = new EnemyBody[] { };
+    }
+
+    private void Start()
+    {
         enemyBodyDict = new Dictionary<int, EnemyBody>();
         for (int i = 0; i < enemyBody.Length; i++)
         {
+            if (enemyBody[i] == null || enemyBody[i].damageBox == null)
+            {
+                continue;
+            }
+
             enemyBodyDict.Add(enemyBody[i].damageBox.ID, enemyBody[i]);
         }
     }
@@ -54,14 +61,16 @@ public class FightManager : MonoBehaviour
 
     public EnemyBody GetHitPoint(EnemyBody _enemybody)
     {
-        if(enemyBodyDict.ContainsKey(_enemybody.damageBox.ID))
+        Debug.Log($"GetHitPoint1 : {_enemybody.name}");
+        if (enemyBodyDict.ContainsKey(_enemybody.damageBox.ID))
         {
-            Debug.Log($"GetHitPoint : {_enemybody}");
+            Debug.Log($"GetHitPoint : {_enemybody.name}");
             HitBody(_enemybody);
             return enemyBodyDict[_enemybody.damageBox.ID];
         }
         else
         {
+            Debug.Log("Null");
             return null;
         }
     }
@@ -69,8 +78,7 @@ public class FightManager : MonoBehaviour
     public void HitBody(EnemyBody _enemyBody)
     {
         if (_enemyBody == null) return;
-        Debug.Log($"HitBody : {_enemyBody}");
-        ChangeBody = GetHitPoint(_enemyBody);
-        enemy.GetComponent<Test>().OnHitPoint?.Invoke(ChangeBody);
+        Debug.Log($"HitBody : {_enemyBody.name}");
+        enemy.OnHitPoint?.Invoke(_enemyBody);
     }
 }

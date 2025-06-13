@@ -38,6 +38,7 @@ public class Test : XRSimpleInteractable//, IDamageable
 
     private void OnDisable()
     {
+        base.OnDisable();
         OnHitPoint.RemoveListener(GetDamageBox);
     }
 
