@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.XR.Interaction.Toolkit;
 
-public class Test : MonoBehaviour, IDamageable
+
+public class Test : XRSimpleInteractable//, IDamageable
 {
     public EnemyType type;
     public int maxHp = 0;
@@ -12,31 +14,25 @@ public class Test : MonoBehaviour, IDamageable
     [SerializeField] private Transform target;
     [field: SerializeField] public int HP { get; set; }
     [SerializeField] private GameObject avatar;
-    [SerializeField] private GameObject[] damageCollider;
-
     Animator animator;
 
     Coroutine cor;
 
     public UnityEvent<EnemyBody> OnHitPoint;
 
+    private void Awake()
+    {
+        base.Awake();
+    }
+
     private void Update()
     {
         LookRotation();
     }
 
-    private void LookRotation()
-    {
-        transform.LookAt(SetTarget());
-    }
-
-    private Transform SetTarget()
-    {
-        return target;
-    }
-
     private void OnEnable()
     {
+        base.OnEnable();
         OnHitPoint.AddListener(GetDamageBox);
     }
 
@@ -54,6 +50,7 @@ public class Test : MonoBehaviour, IDamageable
     public void GetDamageBox(EnemyBody _enemyBody)
     {
         if (_enemyBody == null) return;
+        Debug.Log($"GetDamageBox : {_enemyBody}");
         TakeDamage(_enemyBody.damageBox.GetDamageValue());
     }
 
@@ -105,6 +102,18 @@ public class Test : MonoBehaviour, IDamageable
     public void Defence()
     {
 
+    }
+
+
+
+    private void LookRotation()
+    {
+        transform.LookAt(SetTarget());
+    }
+
+    private Transform SetTarget()
+    {
+        return target;
     }
 }
 

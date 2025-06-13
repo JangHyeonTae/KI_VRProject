@@ -2,50 +2,31 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : XRDirectInteractor
 {
     private bool isAttack = false;
-    private AudioSource audioSource;
 
-    private void Start()
+    List<Collider> colList = new();
+    public LayerMask targetLayer;
+    public float radius;
+    public Vector3 offset;
+    private Collider targetColllider;
+
+    protected override void OnHoverEntered(HoverEnterEventArgs args)
     {
-        audioSource = GetComponent<AudioSource>();
+        base.OnHoverEntered(args);
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void Attack()
     {
-        Test test = FindObjectOfType<Test>();
-
-        if (test == null)
-            Debug.Log($"{test.name} null");
-
-
-        if(other.gameObject.layer == 9 && test != null && !isAttack)
-        {
-            if(audioSource != null)
-            {
-                audioSource.Stop();
-            }
-            Debug.Log($"{isAttack}");
-            test.OnHitPoint?.Invoke(other.gameObject.GetComponent<EnemyBody>());
-            audioSource.clip = other.gameObject.GetComponent<EnemyBody>().damageBox.punchAudio;
-            audioSource.Play();
-            StartCoroutine(Delay());
-        }
-
-        //if(other.gameObject.layer == default)
-        //{
-        //    Debug.Log("default");
-        //    StartCoroutine(Delay());
-        //    return null;
-        //}
-        //else if(other.gameObject.layer == 9 && other.gameObject.layer != default)
-        //{
-        //    Debug.Log("hit");
-        //    return other.gameObject.GetComponent<EnemyBody>();
-        //}
+        Collider col = GetComponent<Collider>();
+        Manager.FightInstance.GetHitPoint(col.gameObject.GetComponent<EnemyBody>());
+        StartCoroutine(Delay());
     }
+
+
 
     IEnumerator Delay()
     {

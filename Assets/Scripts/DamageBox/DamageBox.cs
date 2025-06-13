@@ -9,6 +9,7 @@ public class DamageBox : ScriptableObject
     public int value;
     public GameObject Particle;
     public AudioClip punchAudio;
+    public int ID;
 
     public int GetDamageValue() => value;
 }
