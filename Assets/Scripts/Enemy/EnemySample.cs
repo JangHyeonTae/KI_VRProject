@@ -1,19 +1,16 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.XR.Interaction.Toolkit;
 
-
-public class Test : MonoBehaviour//, IDamageable
+public class EnemySample : MonoBehaviour, IDamageable
 {
     public EnemyType type;
     public int maxHp = 0;
 
     [SerializeField] private Transform target;
     [field: SerializeField] public int HP { get; set; }
-    
+
     Animator animator;
 
     Coroutine cor;
@@ -68,17 +65,17 @@ public class Test : MonoBehaviour//, IDamageable
         {
             //애니메이션 실행
             //statePattern에 넘길거임
-            
+
             Debug.Log("Red");
         }
         else if (amount > 1 && amount <= 5)
         {
-            
+
             Debug.Log("Yellow");
         }
         else
         {
-            
+
             Debug.Log("Black");
         }
 
@@ -110,12 +107,4 @@ public class Test : MonoBehaviour//, IDamageable
     {
         return target;
     }
-}
-
-
-public enum EnemyType
-{
-    None,
-    Test,
-    Fruit
 }

@@ -9,7 +9,7 @@ public class FightManager : MonoBehaviour
     public static FightManager FightInstance { get { return fightInstance; } }
 
     public EnemyBody[] enemyBody = new EnemyBody[6];
-    Dictionary<int, EnemyBody> enemyBodyDict;
+    Dictionary<string, EnemyBody> enemyBodyDict;
 
 
     private EnemyBody changeBody;
@@ -17,7 +17,7 @@ public class FightManager : MonoBehaviour
 
     public UnityEvent<EnemyBody> OnHit;
 
-    public Test enemy;
+    public EnemySample enemy;
 
 
     private void Awake()
@@ -37,16 +37,17 @@ public class FightManager : MonoBehaviour
 
     private void Start()
     {
-        enemyBodyDict = new Dictionary<int, EnemyBody>();
+        enemyBodyDict = new Dictionary<string, EnemyBody>();
         for (int i = 0; i < enemyBody.Length; i++)
         {
             if (enemyBody[i] == null || enemyBody[i].damageBox == null)
             {
-                Debug.Log($"enemyBodyDict Not Set");
+                
+                Debug.Log($"{enemyBody[i].tag}notset");
                 continue;
             }
 
-            enemyBodyDict.Add(enemyBody[i].damageBox.ID, enemyBody[i]);
+            enemyBodyDict.Add(enemyBody[i].tag, enemyBody[i]);
         }
     }
 
@@ -62,12 +63,12 @@ public class FightManager : MonoBehaviour
 
     public EnemyBody GetHitPoint(EnemyBody _enemybody)
     {
-        Debug.Log($"GetHitPoint1 : {_enemybody.name}");
-        if (enemyBodyDict.ContainsKey(_enemybody.damageBox.ID))
+        Debug.Log($"GetHitPoint1 : {_enemybody.tag}");
+        if (enemyBodyDict.ContainsKey(_enemybody.tag))
         {
-            Debug.Log($"GetHitPoint : {_enemybody.name}");
+            Debug.Log($"GetHitPoint : {_enemybody.tag}");
             HitBody(_enemybody);
-            return enemyBodyDict[_enemybody.damageBox.ID];
+            return enemyBodyDict[_enemybody.tag];
         }
         else
         {
