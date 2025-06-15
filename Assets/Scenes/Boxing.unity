@@ -251,6 +251,7 @@ GameObject:
   - component: {fileID: 494663354}
   - component: {fileID: 494663356}
   - component: {fileID: 494663357}
+  - component: {fileID: 494663358}
   m_Layer: 9
   m_Name: Enemy
   m_TagString: Untagged
@@ -267,7 +268,7 @@ Transform:
   m_GameObject: {fileID: 494663352}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 1.5}
+  m_LocalPosition: {x: 0, y: 0, z: 1.95}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -313,13 +314,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d883fea039f453438b92713695cb21a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  maxHp: 10000
-  target: {fileID: 1509244335791118510}
+  target: {fileID: 5142826092274806516}
+  targetDistance: 2
+  canFollow: 0
   <HP>k__BackingField: 0
+  moveSpeed: 1
+  animator: {fileID: 0}
+  isAttack: 0
   OnHitPoint:
     m_PersistentCalls:
       m_Calls: []
+  rand: 0
+  randDelay: 1
+--- !u!95 &494663358
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 494663352}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 3b4b22bde84131d4fae995c112b0592f, type: 3}
+  m_Controller: {fileID: 9100000, guid: 03c251c4eada624408b50b4aef2eb471, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &537314404 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2223822954044817850, guid: 0994a8c5f31389e459fd13dfbd58345f, type: 3}
@@ -2411,7 +2438,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 543450652182442708}
-  - component: {fileID: 5866666020390054062}
   m_Layer: 9
   m_Name: Avatar
   m_TagString: Untagged
@@ -6969,27 +6995,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.000036746264, y: -0.13112509, z: 0.011433661}
     m_Extent: {x: 0.973426, y: 0.93783796, z: 0.19394961}
   m_DirtyAABB: 0
---- !u!95 &5866666020390054062
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919132148533405806}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 3b4b22bde84131d4fae995c112b0592f, type: 3}
-  m_Controller: {fileID: 9100000, guid: 03c251c4eada624408b50b4aef2eb471, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &5901452234348879959
 Transform:
   m_ObjectHideFlags: 0
