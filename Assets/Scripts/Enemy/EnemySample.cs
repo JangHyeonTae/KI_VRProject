@@ -29,6 +29,7 @@ public class EnemySample : MonoBehaviour, IDamageable
     Coroutine followCor;
     Coroutine attackCor;
     Coroutine canAttackCor;
+    Coroutine turnCor;
     Rigidbody rigid;
 
     public UnityEvent<EnemyBody> OnHitPoint;
@@ -265,8 +266,12 @@ public class EnemySample : MonoBehaviour, IDamageable
     private void LookRotation()
     {
         if (target == null) return;
-        transform.LookAt(target);
+        if(!isAttack)
+        {
+            transform.LookAt(target);
+        }
     }
+
 
 
 

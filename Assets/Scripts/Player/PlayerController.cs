@@ -76,7 +76,7 @@ public class PlayerController : XRDirectInteractor
         }
 
         Debug.Log($"cor : {enemyObject.name}");
-        Manager.FightInstance.GetHitPoint(enemyObject.transform.GetComponentInChildren<EnemyBody>());
+        Manager.FightInstance.GetHitPoint(enemyObject.transform.GetComponent<EnemyBody>());
         
         StartCoroutine(Delay());
         

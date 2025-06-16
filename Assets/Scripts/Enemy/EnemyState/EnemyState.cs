@@ -11,15 +11,9 @@ public class EnemyState : BaseState
         this.enemy = _enemy;
     }
 
-    public override void Enter()
-    {
-        
-    }
+    public override void Enter() { }
 
-    public override void Exit()
-    {
-        
-    }
+    public override void Exit() { }
 
     public override void Update()
     {
@@ -33,10 +27,7 @@ public class EnemyState : BaseState
 
 public class Enemy_Idle : EnemyState
 {
-    public Enemy_Idle(EnemySample _enemy) : base(_enemy)
-    {
-
-    }
+    public Enemy_Idle(EnemySample _enemy) : base(_enemy) { }
 
     public override void Enter()
     {
