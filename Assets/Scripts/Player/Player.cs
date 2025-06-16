@@ -2,20 +2,27 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour, IDamageable
 {
+    public Camera cam;
     [SerializeField] private int maxHp;
     private int hp;
     public int Hp { get { return hp; } set { hp = value; OnChangeHp?.Invoke(hp); } }
     public event Action<int> OnChangeHp;
 
-    public GameObject particlePrefab;
-    public bool isDefend = false;
+    public GameObject[] particlePrefab;
+    public Transform[] particlePos;
 
+    public GameObject hpPanel;
+    private int rand;
+
+    Coroutine panelCor;
     private void Start()
     {
-        hp = maxHp;
+        Hp = maxHp;
+        cam = Camera.main;
     }
 
     private void OnEnable()
@@ -28,44 +35,50 @@ public class Player : MonoBehaviour, IDamageable
         OnChangeHp -= HpGuage;
     }
 
+
     public void TakeDamage(int amount)
     {
+        if (amount <= 0) return;
+
         Hp = Mathf.Max(0, Hp - amount);
-        Debug.Log($"{Hp}");
-        //Instantiate(particlePrefab);
+        GameObject obj1 = Instantiate(particlePrefab[0], particlePos[0]);
+        GameObject obj2 = Instantiate(particlePrefab[1], particlePos[1]);
+        Destroy(obj1, 1f);
+        Destroy(obj2, 1f);
+
+
         if (Hp <= 0)
         {
             Debug.Log("GameOver");
         }
+
     }
 
-    public void Defend(bool _isDefend)
-    {
-        GameObject enemyObject = GetComponentInChildren<PlayerController>().gameObject;
-        if (enemyObject == null)
-        {
-            isDefend = _isDefend;
-        }
-        else
-        {
-            isDefend = _isDefend;
-        }
-    }
-    private void HpGuage(int amount)
-    {
+
+    
+    private void HpGuage(int hp)
+    { 
         Debug.Log($"{Hp}");
 
-        if (amount < 100 && amount >= 50)
+        if(hp < 100)
         {
-            Debug.Log("100");
-        }
-        else if(amount > 50 && amount <= 20)
-        {
-            Debug.Log("50");
-        }
-        else
-        {
-            Debug.Log("10");
+            if(panelCor == null)
+            {
+                //panelCor = StartCoroutine(TakeDamagePanel());
+            }
         }
     }
+
+    //WaitForSeconds panelShow = new WaitForSeconds(1f);
+    //IEnumerator TakeDamagePanel()
+    //{
+    //    hpPanel.SetActive(true);
+    //    yield return panelShow;
+    //    hpPanel.SetActive(false);
+    //    if(panelCor != null)
+    //    {
+    //        StopCoroutine(panelCor);
+    //        panelCor = null;
+    //    }
+    //}
 }

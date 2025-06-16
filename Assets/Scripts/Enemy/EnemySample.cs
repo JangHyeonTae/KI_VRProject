@@ -37,12 +37,12 @@ public class EnemySample : MonoBehaviour, IDamageable
     public float randDelay = 1f;
     private float randTime = 0f;
 
-    public float attackRadius;
     public float attackRange;
     public LayerMask targetLayer;
-    public GameObject particlePrefab;
-    public int attackDamage;
+    public GameObject[] particlePrefab;
+    public Transform[] particlePos;
 
+    public float runTime;
     #region Animattion_Hash
     public readonly int IDLE_HASH = Animator.StringToHash("Idle");
     public readonly int WALKING_HASH = Animator.StringToHash("Walking");
@@ -92,6 +92,7 @@ public class EnemySample : MonoBehaviour, IDamageable
         stateMachine.randStateDic.Add(2, new Enemy_LeftUpper(this));
         stateMachine.randStateDic.Add(3, new Enemy_RightHook(this));
 
+
         stateMachine.curState = stateMachine.stateDic[EState.Idle];
     }
 
@@ -123,7 +124,7 @@ public class EnemySample : MonoBehaviour, IDamageable
 
     private IEnumerator CorAttack()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(runTime);
         isAttack = false;
         yield return new WaitForEndOfFrame();
         attackCor = null;
@@ -204,6 +205,11 @@ public class EnemySample : MonoBehaviour, IDamageable
     IEnumerator TakeHit(int amount)
     {
         Debug.Log($"test : {amount}");
+        GameObject obj1 = Instantiate(particlePrefab[0], particlePos[0]);
+        GameObject obj2 = Instantiate(particlePrefab[1], particlePos[1]);
+        Destroy(obj1, 1.5f);
+        Destroy(obj2, 1.5f);
+
         if (amount > 5)
         {
             takeDamage = true;
@@ -232,41 +238,28 @@ public class EnemySample : MonoBehaviour, IDamageable
 
     public void EnemyAttack(int amount)
     {
-        if (Manager.FightInstance.player.isDefend) amount = 0;
+        if (Manager.FightInstance.player[0].isDefend ||
+            Manager.FightInstance.player[1].isDefend) return;
 
-        Vector3 center = transform.position;// + Vector3.up * 1f;
-        Collider[] _colliders = Physics.OverlapSphere(center, attackRadius, targetLayer);
+        
+        Player targetPlayer = target.GetComponent<Player>();
+        
+        Vector3 targetPos = targetPlayer.transform.position;
+        targetPos.y = 0;
+        Vector3 attackPos = transform.position;
+        attackPos.y = 0;
 
-        foreach (Collider target in _colliders)
+        Vector3 targetDir = (targetPos - attackPos).normalized;
+
+        if (Vector3.Angle(transform.forward, targetDir) > attackRange * 0.5f)
+            return;
+
+        IDamageable damageable = target.GetComponent<IDamageable>();
+        if (damageable != null)
         {
-            Vector3 targetPos = target.transform.position;
-            targetPos.y = 0;
-            Vector3 attackPos = transform.position;
-            attackPos.y = 0;
-
-            Vector3 targetDir = (targetPos - attackPos).normalized;
-
-            if (Vector3.Angle(transform.forward, targetDir) > attackRange * 0.5f)
-                continue;
-
-
-            IDamageable damageable = target.GetComponent<IDamageable>();
-            if (damageable != null)
-            {
-                //GameObject obj = Instantiate(particlePrefab, target.transform.position + Vector3.up * 1f, Quaternion.identity);
-                damageable.TakeDamage(amount);
-                //if (obj != null)
-                //{
-                //    Destroy(obj, 2f);
-                //}
-            }
+            damageable.TakeDamage(amount);
         }
-    }
-
-    public void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position + Vector3.up * 1f, attackRadius);
+        
     }
 
     private void LookRotation()
