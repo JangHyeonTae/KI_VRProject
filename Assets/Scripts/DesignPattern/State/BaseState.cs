@@ -5,17 +5,17 @@ using UnityEngine.Pool;
 
 public enum EState
 {
-    Idle,
-    Walking,
-    TakeDamage,
-    Jab,
+    Jab = 0,
     LeftHook,
     RightHook,
     LeftUpper,
     LeftBlock,
     RightBlock,
     StepBack,
-    StepForward
+    StepForward,
+    Walking,
+    Idle,
+    TakeDamage,
 }
 
 public abstract class BaseState

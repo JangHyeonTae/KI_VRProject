@@ -314,18 +314,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d883fea039f453438b92713695cb21a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 5142826092274806516}
-  targetDistance: 2
+  target: {fileID: 1509244335791118510}
+  targetDistance: 1.5
   canFollow: 0
   <HP>k__BackingField: 0
-  moveSpeed: 1
-  animator: {fileID: 0}
+  moveSpeed: 0.3
+  animator: {fileID: 494663358}
   isAttack: 0
+  canAttack: 0
+  takeDamage: 0
   OnHitPoint:
     m_PersistentCalls:
       m_Calls: []
   rand: 0
   randDelay: 1
+  attackRadius: 1.5
+  attackRange: 100
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  particlePrefab: {fileID: 0}
+  attackDamage: 5
 --- !u!95 &494663358
 Animator:
   serializedVersion: 5
@@ -1728,6 +1737,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   enemy: {fileID: 494663357}
+  player: {fileID: 5255154115439833393}
 --- !u!4 &2133863380
 Transform:
   m_ObjectHideFlags: 0
@@ -3036,7 +3046,7 @@ Transform:
   m_GameObject: {fileID: 5255154115439833392}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -2.19}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4158,10 +4168,34 @@ MonoBehaviour:
       m_Calls: []
   m_SelectEntered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5255154115439833393}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: Defend
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   m_SelectExited:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5255154115439833393}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: Defend
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_StartingHoverFilters: []
   m_StartingSelectFilters: []
   m_OnHoverEntered:
@@ -5368,13 +5402,29 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1509244335791118510}
-  m_Layer: 0
+  - component: {fileID: 5255154115439833393}
+  m_Layer: 7
   m_Name: XR Interaction Setup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &5255154115439833393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5255154115439833392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d1324b0786a9c647b08f84f654b7aaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHp: 100
+  particlePrefab: {fileID: 0}
+  isDefend: 0
 --- !u!114 &5298576633998229845
 MonoBehaviour:
   m_ObjectHideFlags: 0

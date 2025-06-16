@@ -16,16 +16,19 @@ public class EnemySample : MonoBehaviour, IDamageable
     [SerializeField] private Transform target;
     [SerializeField] private float targetDistance;
 
-    public bool canFollow = false;
+    public bool canFollow = true;
     [field: SerializeField] public int HP { get; set; }
 
     public float moveSpeed;
     public Animator animator;
     public bool isAttack;
+    public bool canAttack = false;
+    public bool takeDamage = false;
 
     Coroutine cor;
     Coroutine followCor;
     Coroutine attackCor;
+    Coroutine canAttackCor;
     Rigidbody rigid;
 
     public UnityEvent<EnemyBody> OnHitPoint;
@@ -33,6 +36,12 @@ public class EnemySample : MonoBehaviour, IDamageable
     public int rand;
     public float randDelay = 1f;
     private float randTime = 0f;
+
+    public float attackRadius;
+    public float attackRange;
+    public LayerMask targetLayer;
+    public GameObject particlePrefab;
+    public int attackDamage;
 
     #region Animattion_Hash
     public readonly int IDLE_HASH = Animator.StringToHash("Idle");
@@ -72,14 +81,16 @@ public class EnemySample : MonoBehaviour, IDamageable
         stateMachine.stateDic.Add(EState.Idle, new Enemy_Idle(this));
         stateMachine.stateDic.Add(EState.Jab, new Enemy_Jab(this));
         stateMachine.stateDic.Add(EState.Walking, new Enemy_Walking(this));
-        stateMachine.stateDic.Add(EState.StepBack, new Enemy_StepBack(this));
         stateMachine.stateDic.Add(EState.LeftHook, new Enemy_LeftHook(this));
-        stateMachine.stateDic.Add(EState.StepForward, new Enemy_StepForward(this));
         stateMachine.stateDic.Add(EState.RightHook, new Enemy_RightHook(this));
-        stateMachine.stateDic.Add(EState.RightBlock, new Enemy_RightBlock(this));
-        stateMachine.stateDic.Add(EState.LeftBlock, new Enemy_LeftBlock(this));
         stateMachine.stateDic.Add(EState.TakeDamage, new Enemy_TakeDamage(this));
         stateMachine.stateDic.Add(EState.LeftUpper, new Enemy_LeftUpper(this));
+
+
+        stateMachine.randStateDic.Add(0, new Enemy_LeftHook(this));
+        stateMachine.randStateDic.Add(1, new Enemy_Jab(this));
+        stateMachine.randStateDic.Add(2, new Enemy_LeftUpper(this));
+        stateMachine.randStateDic.Add(3, new Enemy_RightHook(this));
 
         stateMachine.curState = stateMachine.stateDic[EState.Idle];
     }
@@ -88,12 +99,17 @@ public class EnemySample : MonoBehaviour, IDamageable
     {
         if(!isAttack)
         {
-            rand = Random.Range(0, 9);
+            rand = Random.Range(0, 4);
         }
 
         LookRotation();
         FollowTarget();
         stateMachine.Update();
+
+        if(!canAttack)
+        {
+            CanAttackAnim();
+        }
     }
 
     #region AttackCoroutine
@@ -107,9 +123,28 @@ public class EnemySample : MonoBehaviour, IDamageable
 
     private IEnumerator CorAttack()
     {
-        yield return new WaitForSeconds(0.7f);
-        attackCor = null;
+        yield return new WaitForSeconds(1f);
         isAttack = false;
+        yield return new WaitForEndOfFrame();
+        attackCor = null;
+    }
+
+    public void CanAttackAnim()
+    {
+        if(canAttackCor == null)
+        {
+            canAttackCor = StartCoroutine(CanAttack());
+        }
+    }
+
+    IEnumerator CanAttack()
+    {
+        yield return new WaitForSeconds(2f);
+        canAttack = true;
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(1f);
+        canAttack = false;
+        canAttackCor = null;
     }
     #endregion
 
@@ -128,7 +163,7 @@ public class EnemySample : MonoBehaviour, IDamageable
                 followCor = StartCoroutine(FollowDelay());
             }
         }
-        else if(d.sqrMagnitude > targetDistance && followCor != null)
+        else if(d.sqrMagnitude < targetDistance && followCor != null)
         {
             StopCoroutine(followCor);
             canFollow = false;
@@ -142,7 +177,7 @@ public class EnemySample : MonoBehaviour, IDamageable
     }
     IEnumerator FollowDelay()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
         canFollow = true;
         yield return null;
     }
@@ -171,6 +206,7 @@ public class EnemySample : MonoBehaviour, IDamageable
         Debug.Log($"test : {amount}");
         if (amount > 5)
         {
+            takeDamage = true;
             //애니메이션 실행
             //statePattern에 넘길거임
 
@@ -178,33 +214,60 @@ public class EnemySample : MonoBehaviour, IDamageable
         }
         else if (amount > 1 && amount <= 5)
         {
-
+            takeDamage = true;
             Debug.Log("Yellow");
         }
         else
         {
 
+            takeDamage = false;
             Debug.Log("Black");
         }
 
         yield return new WaitForSeconds(1f);
-        //애니메이션 종료
-        StopCoroutine(cor);
+        takeDamage = false;
         cor = null;
     }
     #endregion
 
-    public void Attack(int amount)
+    public void EnemyAttack(int amount)
     {
+        if (Manager.FightInstance.player.isDefend) amount = 0;
 
+        Vector3 center = transform.position;// + Vector3.up * 1f;
+        Collider[] _colliders = Physics.OverlapSphere(center, attackRadius, targetLayer);
+
+        foreach (Collider target in _colliders)
+        {
+            Vector3 targetPos = target.transform.position;
+            targetPos.y = 0;
+            Vector3 attackPos = transform.position;
+            attackPos.y = 0;
+
+            Vector3 targetDir = (targetPos - attackPos).normalized;
+
+            if (Vector3.Angle(transform.forward, targetDir) > attackRange * 0.5f)
+                continue;
+
+
+            IDamageable damageable = target.GetComponent<IDamageable>();
+            if (damageable != null)
+            {
+                //GameObject obj = Instantiate(particlePrefab, target.transform.position + Vector3.up * 1f, Quaternion.identity);
+                damageable.TakeDamage(amount);
+                //if (obj != null)
+                //{
+                //    Destroy(obj, 2f);
+                //}
+            }
+        }
     }
 
-    public void Defence()
+    public void OnDrawGizmos()
     {
-
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position + Vector3.up * 1f, attackRadius);
     }
-
-
 
     private void LookRotation()
     {

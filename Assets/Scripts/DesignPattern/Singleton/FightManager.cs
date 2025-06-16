@@ -18,6 +18,7 @@ public class FightManager : MonoBehaviour
     public UnityEvent<EnemyBody> OnHit;
 
     public EnemySample enemy;
+    public Player player;
 
 
     private void Awake()
