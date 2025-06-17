@@ -49,6 +49,7 @@ public class EnemySample : MonoBehaviour, IDamageable
     public float runTime;
 
     [SerializeField] private HPGuage hpUI;
+    [SerializeField] private AudioClip takeDamageSound;
     #region Animattion_Hash
     public readonly int IDLE_HASH = Animator.StringToHash("Idle");
     public readonly int WALKING_HASH = Animator.StringToHash("Walking");
@@ -209,7 +210,8 @@ public class EnemySample : MonoBehaviour, IDamageable
             cor = StartCoroutine(TakeHit(amount));
         }
         SetHpUI(HP);
-        if(HP == 0)
+        
+        if (HP == 0)
         {
             Manager.Instance.ShowWin();
         }
@@ -222,7 +224,7 @@ public class EnemySample : MonoBehaviour, IDamageable
         GameObject obj2 = Instantiate(particlePrefab[1], particlePos[1]);
         Destroy(obj1, 1.5f);
         Destroy(obj2, 1.5f);
-
+        PlayShootSound();
         if (amount > 5)
         {
             takeDamage = true;
@@ -239,6 +241,12 @@ public class EnemySample : MonoBehaviour, IDamageable
         yield return new WaitForSeconds(1f);
         takeDamage = false;
         cor = null;
+    }
+
+    private void PlayShootSound()
+    {
+        SFXController sfx = Manager.AudioInstance.GetSFX();
+        sfx.Play(takeDamageSound);
     }
     #endregion
 
@@ -265,7 +273,6 @@ public class EnemySample : MonoBehaviour, IDamageable
         {
             damageable.TakeDamage(amount);
         }
-        
     }
 
     private void LookRotation()

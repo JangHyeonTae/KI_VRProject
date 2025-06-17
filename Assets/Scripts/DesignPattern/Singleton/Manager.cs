@@ -6,4 +6,6 @@ public class Manager
 {
     public static FightManager FightInstance => FightManager.FightInstance;
     public static GameManager Instance => GameManager.Instance;
+
+    public static AudioManager AudioInstance => AudioManager.AudioInstance;
 }

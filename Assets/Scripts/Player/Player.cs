@@ -19,6 +19,7 @@ public class Player : MonoBehaviour, IDamageable
 
     Coroutine panelCor;
     [SerializeField] private HPGuage hpUI;
+    [SerializeField] private AudioClip takeDamageSound;
     private void Start()
     {
         Hp = maxHp;
@@ -45,7 +46,7 @@ public class Player : MonoBehaviour, IDamageable
         GameObject obj2 = Instantiate(particlePrefab[1], particlePos[1]);
         Destroy(obj1, 1f);
         Destroy(obj2, 1f);
-
+        PlayShootSound();
         OnChangeHp?.Invoke(Hp);
         if (Hp <= 0)
         {
@@ -53,8 +54,12 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
+    private void PlayShootSound()
+    {
+        SFXController sfx = Manager.AudioInstance.GetSFX();
+        sfx.Play(takeDamageSound);
+    }
 
-    
     private void SetHpGuage(int amount)
     {
         float hp = amount / (float)maxHp;
