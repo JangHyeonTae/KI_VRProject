@@ -56,7 +56,9 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         gameStartText.text = "1";
         yield return new WaitForSeconds(1f);
+        gameStartText.color = Color.red;
         gameStartText.text = "Game Start!";
+        gameStartText.color = Color.white;
         yield return new WaitForSeconds(0.5f);
         ShowStart();
         gameStart.SetActive(false); 

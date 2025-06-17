@@ -17,7 +17,9 @@ public class EnemySample : MonoBehaviour, IDamageable
     [SerializeField] private float targetDistance;
 
     public bool canFollow = true;
-    [field: SerializeField] public int HP { get; set; }
+
+    private int hp;
+    public int HP { get { return hp; } set { hp = value; OnChangeHp?.Invoke(hp); } }
 
     public float moveSpeed;
     public Animator animator;
@@ -33,6 +35,7 @@ public class EnemySample : MonoBehaviour, IDamageable
     Rigidbody rigid;
 
     public UnityEvent<EnemyBody> OnHitPoint;
+    public UnityEvent<int> OnChangeHp;
 
     public int rand;
     public float randDelay = 1f;
@@ -44,6 +47,8 @@ public class EnemySample : MonoBehaviour, IDamageable
     public Transform[] particlePos;
 
     public float runTime;
+
+    [SerializeField] private HPGuage hpUI;
     #region Animattion_Hash
     public readonly int IDLE_HASH = Animator.StringToHash("Idle");
     public readonly int WALKING_HASH = Animator.StringToHash("Walking");
@@ -61,11 +66,13 @@ public class EnemySample : MonoBehaviour, IDamageable
     private void OnEnable()
     {
         OnHitPoint.AddListener(GetDamageBox);
+        OnChangeHp.AddListener(SetHpUI);
     }
 
     private void OnDisable()
     {
         OnHitPoint.RemoveListener(GetDamageBox);
+        OnChangeHp.RemoveListener(SetHpUI);
     }
 
     private void Start()
@@ -108,7 +115,7 @@ public class EnemySample : MonoBehaviour, IDamageable
         FollowTarget();
         stateMachine.Update();
 
-        if(!canAttack)
+        if(!canAttack && !canFollow)
         {
             CanAttackAnim();
         }
@@ -201,7 +208,7 @@ public class EnemySample : MonoBehaviour, IDamageable
         {
             cor = StartCoroutine(TakeHit(amount));
         }
-
+        SetHpUI(HP);
         if(HP == 0)
         {
             Manager.Instance.ShowWin();
@@ -219,21 +226,14 @@ public class EnemySample : MonoBehaviour, IDamageable
         if (amount > 5)
         {
             takeDamage = true;
-            //애니메이션 실행
-            //statePattern에 넘길거임
-
-            Debug.Log("Red");
         }
         else if (amount > 1 && amount <= 5)
         {
             takeDamage = true;
-            Debug.Log("Yellow");
         }
         else
         {
-
             takeDamage = false;
-            Debug.Log("Black");
         }
 
         yield return new WaitForSeconds(1f);
@@ -277,7 +277,11 @@ public class EnemySample : MonoBehaviour, IDamageable
         }
     }
 
-
+    private void SetHpUI(int amount)
+    {
+        float hp = amount / (float)maxHp;
+        hpUI.SetEnemyHp(hp);
+    }
 
 
 }

@@ -15,10 +15,10 @@ public class Player : MonoBehaviour, IDamageable
     public GameObject[] particlePrefab;
     public Transform[] particlePos;
 
-    public GameObject hpPanel;
     private int rand;
 
     Coroutine panelCor;
+    [SerializeField] private HPGuage hpUI;
     private void Start()
     {
         Hp = maxHp;
@@ -27,12 +27,12 @@ public class Player : MonoBehaviour, IDamageable
 
     private void OnEnable()
     {
-        OnChangeHp += HpGuage;
+        OnChangeHp += SetHpGuage;
     }
 
     private void OnDisable()
     {
-        OnChangeHp -= HpGuage;
+        OnChangeHp -= SetHpGuage;
     }
 
 
@@ -46,7 +46,7 @@ public class Player : MonoBehaviour, IDamageable
         Destroy(obj1, 1f);
         Destroy(obj2, 1f);
 
-
+        OnChangeHp?.Invoke(Hp);
         if (Hp <= 0)
         {
             Manager.Instance.ShowEnd();
@@ -55,17 +55,10 @@ public class Player : MonoBehaviour, IDamageable
 
 
     
-    private void HpGuage(int hp)
-    { 
-        Debug.Log($"{Hp}");
-
-        if(hp < 100)
-        {
-            if(panelCor == null)
-            {
-                //panelCor = StartCoroutine(TakeDamagePanel());
-            }
-        }
+    private void SetHpGuage(int amount)
+    {
+        float hp = amount / (float)maxHp;
+        hpUI.SetPlayerHp(hp);
     }
 
    //WaitForSeconds panelShow = new WaitForSeconds(1f);
