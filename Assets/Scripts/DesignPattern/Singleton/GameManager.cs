@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     private static GameManager instance;
     public static GameManager Instance { get { return instance; } }
 
-    [SerializeField] private EnemySample enemySample;
+    [SerializeField] public EnemySample enemySample;
     [SerializeField] private LocomotionSystem playerLocomotion;
     [SerializeField] private TextMeshProUGUI gameStartText;
     [SerializeField] private GameObject gameStart;
@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour
         enemySample.enabled = false;
         playerLocomotion.gameObject.SetActive(false);
     }
+
 
     public void ShowStart()
     {

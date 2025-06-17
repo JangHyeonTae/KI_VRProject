@@ -51,6 +51,7 @@ public class Player : MonoBehaviour, IDamageable
         if (Hp <= 0)
         {
             Manager.Instance.ShowEnd();
+            Manager.Instance.enemySample.isWin = true;
         }
     }
 

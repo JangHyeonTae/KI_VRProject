@@ -16,6 +16,7 @@ public enum EState
     Walking,
     Idle,
     TakeDamage,
+    Win
 }
 
 public abstract class BaseState

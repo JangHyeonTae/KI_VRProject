@@ -21,6 +21,11 @@ public class EnemyState : BaseState
         {
             enemy.stateMachine.ChangeState(enemy.stateMachine.stateDic[EState.TakeDamage]);
         }
+
+        if(enemy.isWin)
+        {
+            enemy.stateMachine.ChangeState(enemy.stateMachine.stateDic[EState.Win]);
+        }
         
     }
 }
@@ -295,6 +300,26 @@ public class Enemy_LeftUpper : EnemyState
             enemy.stateMachine.ChangeState(enemy.stateMachine.stateDic[EState.Idle]);
 
         }
+    }
+
+    public override void Exit() { }
+}
+
+public class Enemy_Win : EnemyState
+{
+    public Enemy_Win(EnemySample _enemy) : base(_enemy)
+    {
+
+    }
+    public override void Enter()
+    {
+        enemy.animator.Play(enemy.WIN_HASH);
+        enemy.CanMove = false;
+    }
+
+    public override void Update()
+    {
+        
     }
 
     public override void Exit() { }

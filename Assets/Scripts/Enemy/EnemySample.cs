@@ -26,6 +26,7 @@ public class EnemySample : MonoBehaviour, IDamageable
     public bool isAttack;
     public bool canAttack = false;
     public bool takeDamage = false;
+    public bool isWin = false;
 
     Coroutine cor;
     Coroutine followCor;
@@ -62,6 +63,7 @@ public class EnemySample : MonoBehaviour, IDamageable
     public readonly int STEPFORWARD_HASH = Animator.StringToHash("StepForward");
     public readonly int STEPBACK_HASH = Animator.StringToHash("StepBack");
     public readonly int TAKEDAMAGE_HASH = Animator.StringToHash("TakeDamage");
+    public readonly int WIN_HASH = Animator.StringToHash("Win");
     #endregion
 
     private void OnEnable()
@@ -94,6 +96,7 @@ public class EnemySample : MonoBehaviour, IDamageable
         stateMachine.stateDic.Add(EState.RightHook, new Enemy_RightHook(this));
         stateMachine.stateDic.Add(EState.TakeDamage, new Enemy_TakeDamage(this));
         stateMachine.stateDic.Add(EState.LeftUpper, new Enemy_LeftUpper(this));
+        stateMachine.stateDic.Add(EState.Win, new Enemy_Win(this));
 
 
         stateMachine.randStateDic.Add(0, new Enemy_LeftHook(this));
