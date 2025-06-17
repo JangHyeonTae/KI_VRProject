@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private EnemySample enemySample;
     [SerializeField] private LocomotionSystem playerLocomotion;
     [SerializeField] private TextMeshProUGUI gameStartText;
+    [SerializeField] private GameObject gameStart;
     [SerializeField] private GameObject gameEnd;
     [SerializeField] private GameObject gameWin;
 
@@ -31,8 +32,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        enemySample.enabled = false;
-        playerLocomotion.enabled = false;
+        ShowStop();
         gameEnd.SetActive(false);
         gameWin.SetActive(false);
 
@@ -49,15 +49,28 @@ public class GameManager : MonoBehaviour
         gameStartText.text = "1";
         yield return new WaitForSeconds(1f);
         gameStartText.text = "Game Start!";
+        yield return new WaitForSeconds(0.5f);
+        ShowStart();
+        gameStartText.gameObject.SetActive(false);
+    }
+
+    public void ShowStop()
+    {
+        enemySample.enabled = false;
+        playerLocomotion.gameObject.SetActive(false);
+    }
+
+    public void ShowStart()
+    {
         enemySample.enabled = true;
-        playerLocomotion.enabled = true;
+        playerLocomotion.gameObject.SetActive(true);
     }
 
     public void ShowEnd()
     {
         gameEnd.SetActive(true);
     }
-
+    
     public void ShowWin()
     {
         gameWin.SetActive(true);

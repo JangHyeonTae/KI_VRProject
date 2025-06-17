@@ -69,16 +69,16 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
-    //WaitForSeconds panelShow = new WaitForSeconds(1f);
-    //IEnumerator TakeDamagePanel()
-    //{
-    //    hpPanel.SetActive(true);
-    //    yield return panelShow;
-    //    hpPanel.SetActive(false);
-    //    if(panelCor != null)
-    //    {
-    //        StopCoroutine(panelCor);
-    //        panelCor = null;
-    //    }
-    //}
+   //WaitForSeconds panelShow = new WaitForSeconds(1f);
+   //IEnumerator TakeDamagePanel()
+   //{
+   //    hpPanel.SetActive(true);
+   //    yield return panelShow;
+   //    hpPanel.SetActive(false);
+   //    if(panelCor != null)
+   //    {
+   //        StopCoroutine(panelCor);
+   //        panelCor = null;
+   //    }
+   //}
 }

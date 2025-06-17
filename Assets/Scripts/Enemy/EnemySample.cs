@@ -239,7 +239,7 @@ public class EnemySample : MonoBehaviour, IDamageable
 
     public void EnemyAttack(int amount)
     {
-        if (Manager.FightInstance.player[0].isDefend ||
+        if (Manager.FightInstance.player[0].isDefend &&
             Manager.FightInstance.player[1].isDefend) return;
 
         
