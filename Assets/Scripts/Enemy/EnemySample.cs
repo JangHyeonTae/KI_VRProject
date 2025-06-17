@@ -201,6 +201,11 @@ public class EnemySample : MonoBehaviour, IDamageable
         {
             cor = StartCoroutine(TakeHit(amount));
         }
+
+        if(HP == 0)
+        {
+            Manager.Instance.ShowWin();
+        }
     }
 
     IEnumerator TakeHit(int amount)

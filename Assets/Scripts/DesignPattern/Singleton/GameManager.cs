@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class GameManager : MonoBehaviour
@@ -16,6 +17,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject gameStart;
     [SerializeField] private GameObject gameEnd;
     [SerializeField] private GameObject gameWin;
+
+    private Coroutine startCor;
 
     private void Awake()
     {
@@ -33,10 +36,15 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         ShowStop();
+        gameStart.SetActive(true);
         gameEnd.SetActive(false);
         gameWin.SetActive(false);
+    }
 
-        StartCoroutine(StartGame());
+    public void GameStart()
+    {
+        if(startCor == null)
+            StartCoroutine(StartGame());
     }
 
     IEnumerator StartGame()
@@ -51,7 +59,12 @@ public class GameManager : MonoBehaviour
         gameStartText.text = "Game Start!";
         yield return new WaitForSeconds(0.5f);
         ShowStart();
-        gameStartText.gameObject.SetActive(false);
+        gameStart.SetActive(false); 
+        if(startCor != null)
+        {
+            StopCoroutine(startCor);
+            startCor = null;
+        }
     }
 
     public void ShowStop()
@@ -69,11 +82,18 @@ public class GameManager : MonoBehaviour
     public void ShowEnd()
     {
         gameEnd.SetActive(true);
+        ShowStop();
     }
     
     public void ShowWin()
     {
         gameWin.SetActive(true);
+        ShowStop();
+    }
+
+    public void ReStartButton()
+    {
+        SceneManager.LoadScene(0);
     }
 
 }

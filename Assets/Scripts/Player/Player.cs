@@ -49,9 +49,8 @@ public class Player : MonoBehaviour, IDamageable
 
         if (Hp <= 0)
         {
-            Debug.Log("GameOver");
+            Manager.Instance.ShowEnd();
         }
-
     }
 
 
